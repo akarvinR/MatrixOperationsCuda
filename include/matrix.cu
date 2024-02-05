@@ -6,34 +6,34 @@
 #include <time.h>
 template <class T> class Matrix{
     private:
-    int n;
-    int m;
+    long long int n;
+    long long int m;
     T* data;
 
     bool isInitialized = false;
     static bool init;
     public:
 
-    __host__ __device__  bool isValid(int,int);
+    __host__ __device__  bool isValid(long long, long long);
 
 
     Matrix();
-    Matrix(int, int);
+    Matrix(long long, long long);
     ~Matrix();
     void moveToGPU();
     void moveToCPU();
     T* getData();
-     __host__ __device__ int getN();
-     __host__ __device__ int getM();
-    __host__ __device__  void setValue(int, int, T);
-    __host__ __device__  T getValue(int, int);
+     __host__ __device__ long long  getN();
+     __host__ __device__ long long getM();
+    __host__ __device__  void setValue(long long, long long, T);
+    __host__ __device__  T getValue(long long, long long);
     void fillWithRandomInt(int);
     void print();
 
 };
 
 template <typename T>
-__host__ __device__ bool Matrix<T>::isValid(int i, int j){
+__host__ __device__ bool Matrix<T>::isValid(long long int i, long long int j){
     bool validCondition = (i < n) && (j < m) && (i >= 0) && (j >=  0);
     return (validCondition);
 }
@@ -48,11 +48,11 @@ Matrix<T>::Matrix(){
 }
 
 template <typename T>
-Matrix<T>::Matrix(int n, int m){
+Matrix<T>::Matrix(long long n, long long m){
     this->n = n;
     this->m = m;
     this->isInitialized = true;
-    this->data = new int[n*m];
+    this->data = new T[n*m];
 
 }
 
@@ -67,8 +67,8 @@ template <typename T>
 void Matrix<T>::moveToCPU(){
     T* data;
     data = new T[this->n*this->m];
-
-    cudaError_t error = cudaMemcpy(data, this->data, sizeof(T)*(this->n)*(this->m), cudaMemcpyDeviceToHost);
+    size_t bytes = sizeof(T)*(this->n)*(this->m);
+    cudaError_t error = cudaMemcpy(data, this->data, bytes, cudaMemcpyDeviceToHost);
     if (error != cudaSuccess) {
         fprintf(stderr,  "CudaMempyFailed while moving to cpu! : %s", cudaGetErrorString(error) );
      
@@ -81,13 +81,13 @@ void Matrix<T>::moveToCPU(){
 template <typename T>
 void Matrix<T>::moveToGPU(){
     T* data;
-    
-    cudaError_t error =  cudaMalloc((T **)&data, sizeof(T)*(this->n)*(this->m));
+    size_t bytes = sizeof(T)*(this->n)*(this->m);
+    cudaError_t error =  cudaMalloc((T **)&data, bytes);
     if (error != cudaSuccess) {
         fprintf(stderr, "CudaMallocFailed while moving to gpu!");
      
     }
-    cudaMemcpy(data, this->data, sizeof(T)*(this->n)*(this->m), cudaMemcpyHostToDevice);
+    cudaMemcpy(data, this->data, bytes, cudaMemcpyHostToDevice);
     this->data = data;
 }
 
@@ -97,23 +97,23 @@ T* Matrix<T>::getData(){
 }
 
 template <typename T>
- __host__ __device__  int Matrix<T>::getM(){
+ __host__ __device__  long long Matrix<T>::getM(){
     return this->m;
 }
 template <typename T>
- __host__ __device__ int Matrix<T>::getN(){
+ __host__ __device__ long long Matrix<T>::getN(){
     return this->n;
 } 
 
 
 template <typename T>
-__host__ __device__ void Matrix<T>::setValue(int i, int j, T value){
+__host__ __device__ void Matrix<T>::setValue(long long i, long long j, T value){
     this->data[j + i*m] = value;
 }
 
 
 template <typename T>
-__host__ __device__ T Matrix<T>::getValue(int i, int j){
+__host__ __device__ T Matrix<T>::getValue(long long i, long long j){
 
     return this->data[j + i*m];
 }
@@ -123,8 +123,9 @@ __host__ __device__ T Matrix<T>::getValue(int i, int j){
 template <typename T>
 void Matrix<T>::fillWithRandomInt(int maxValue){
 
-    for(int i = 0;i<n;i++){
-        for(int j = 0;j<m;j++){
+    for(long long int i = 0;i<n;i++){
+        for(long long int j = 0;j<m;j++){
+            
             this->data[i*m + j] =  rand()%maxValue;
         }
     }
@@ -138,8 +139,8 @@ template <typename T>
 void Matrix<T>::print(){
 
 
-    for(int i = 0;i<n;i++){
-        for(int j = 0;j<m;j++){
+    for(long long i = 0;i<n;i++){
+        for(long long j = 0;j<m;j++){
             std::cout << data[i*m + j] << " ";
         }
         std::cout << std::endl;
