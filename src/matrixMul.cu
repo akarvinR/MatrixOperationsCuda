@@ -49,9 +49,11 @@ void cpuMatrixMul(Matrix<T>* a, Matrix<T>*  b, Matrix<T>* c){
     for(int i = 0; i<a->getN();i++){
         for(int j = 0;j<b->getM();j++){
             c->setValue(i,j,0);
+            int sum = 0;
             for(int k = 0;k<a->getM();k++){
-                c->setValue(i, j, a->getValue(i,k) + b->getValue(k,j));
+                sum += a->getValue(i,k) + b->getValue(k,j);
             }
+            c->setValue(i,j, sum);
 
         }
     }
