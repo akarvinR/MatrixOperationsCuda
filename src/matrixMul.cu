@@ -100,7 +100,7 @@ void MatrixAdd(int n, int m){
     b->moveToCPU();
     c->moveToCPU();
 
-    std::cout << "GPU Completed Addition in " << GPUmilliseconds << " (ms)" << std::endl;
+    std::cout << "GPU Completed Addition in " << GPUmilliseconds << " [ms]" << std::endl;
     if(!verify(a, b, c)){
         std::cout << "Matrix Addition Verification Has Failed" << std::endl;
     }
@@ -109,6 +109,7 @@ void MatrixAdd(int n, int m){
     cpuMatrixAdd(a, b, c);
     TIME end = getTime();
     std::cout << "CPU Completed Addition in " << (std::chrono::duration_cast<std::chrono::milliseconds>(end-begin).count() )<< " [ms]" << std::endl;
+    
     cudaFree(d_a);
     cudaFree(d_b);
     cudaFree(d_c);

@@ -14,22 +14,20 @@ template <class T> class Matrix{
     static bool init;
     public:
 
+    __host__ __device__  bool isValid(int,int);
+
+
     Matrix();
     Matrix(int, int);
     ~Matrix();
-
-    __host__ __device__  bool isValid(int,int);
+    void moveToGPU();
+    void moveToCPU();
     T* getData();
      __host__ __device__ int getN();
      __host__ __device__ int getM();
-    
-
     __host__ __device__  void setValue(int, int, T);
     __host__ __device__  T getValue(int, int);
-
     void fillWithRandomInt(int);
-    void moveToGPU();
-    void moveToCPU();
     void print();
 
 };
@@ -58,6 +56,13 @@ Matrix<T>::Matrix(int n, int m){
 
 }
 
+
+
+template <typename T>
+Matrix<T>::~Matrix(){
+    delete data;
+
+}
 template <typename T>
 void Matrix<T>::moveToCPU(){
     T* data;
@@ -127,11 +132,6 @@ void Matrix<T>::fillWithRandomInt(int maxValue){
     
 }
 
-template <typename T>
-Matrix<T>::~Matrix(){
-    delete data;
-
-}
 
 
 template <typename T>
