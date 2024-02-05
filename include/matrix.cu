@@ -60,7 +60,7 @@ Matrix<T>::Matrix(long long n, long long m){
 
 template <typename T>
 Matrix<T>::~Matrix(){
-    delete data;
+    delete []data;
 
 }
 template <typename T>
