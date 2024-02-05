@@ -24,6 +24,7 @@ template<typename T>
 void cpuMatrixAdd(Matrix<T>* a, Matrix<T>*  b, Matrix<T>* c){
     for(int i = 0; i<c->getN();i++){
         for(int j = 0;j<c->getM();j++){
+
             c->setValue(i, j, a->getValue(i,j) + b->getValue(i,j));
         }
     }
@@ -36,8 +37,10 @@ __global__ void cudaMatrixMul(Matrix<T>* a, Matrix<T>*  b, Matrix<T>* c){
     int y = blockIdx.y*blockDim.y + threadIdx.y;
 
     if(c->isValid(x,y)){
+        int sum = 0;
         for(int k = 0;k<c->getM(); k++)
-        c->setValue(x, y,  c->getValue(x,y) + a->getValue(x,k)*b->getValue(k,y));
+            sum += a->getValue(x,k)*b->getValue(k,y);
+        c->setValue(x, y,  sum);
     }
 } 
 
