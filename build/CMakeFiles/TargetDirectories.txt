@@ -1,0 +1,3 @@
+/home/akarvin/CudaMutrixMul/build/CMakeFiles/MatrixMul.dir
+/home/akarvin/CudaMutrixMul/build/CMakeFiles/edit_cache.dir
+/home/akarvin/CudaMutrixMul/build/CMakeFiles/rebuild_cache.dir
