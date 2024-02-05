@@ -38,7 +38,7 @@ __global__ void cudaMatrixMul(Matrix<T>* a, Matrix<T>*  b, Matrix<T>* c){
 
     if(c->isValid(x,y)){
         int sum = 0;
-        for(int k = 0;k<c->getM(); k++)
+        for(int k = 0;k<a->getM(); k++)
             sum += a->getValue(x,k)*b->getValue(k,y);
         c->setValue(x, y,  sum);
     }
